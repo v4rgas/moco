@@ -1,32 +1,34 @@
-import './style.css'
+import Matter from "matter-js";
 
-import Matter from 'matter-js'
+// module aliases
+var Engine = Matter.Engine,
+    Render = Matter.Render,
+    Runner = Matter.Runner,
+    Bodies = Matter.Bodies,
+    Composite = Matter.Composite;
 
-const {Bodies, Composite, Engine, Render, Runner, Svg} = Matter;
-console.log('Hello, Matter.js!');
+// create an engine
+var engine = Engine.create();
 
-const canvas = document.getElementById('canvas')
-canvas.width = 791;
-canvas.height = 500;const engine = Engine.create();const render = Render.create({
-  engine: engine,
-  canvas: canvas,
-  options: {
-    width: 791,
-    height: 500,
-    wireframes: false
-  }
+// create a renderer
+var render = Render.create({
+    element: document.body,
+    engine: engine
 });
 
-const ground = Bodies.rectangle(395, 505, 791, 10, {isStatic: true});
-const leftWall = Bodies.rectangle(-11, 0, 10, 1000, {isStatic: true});
-const rightWall = Bodies.rectangle(792, 0, 10, 1000, {isStatic: true});Composite.add(engine.world, [ground, leftWall, rightWall]);
+// create two boxes and a ground
+var boxA = Bodies.rectangle(400, 200, 80, 80);
+var boxB = Bodies.rectangle(450, 50, 80, 80);
+var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+
+// add all of the bodies to the world
+Composite.add(engine.world, [boxA, boxB, ground]);
+
+// run the renderer
 Render.run(render);
-const runner = Runner.create();
 
+// create runner
+var runner = Runner.create();
 
-Runner.run(runner, engine);for (let i = 0; i < 10; i++) {
-  setTimeout(() => {
-    const body = Bodies.rectangle(350 + i, 0, 40, 40);
-    Composite.add(engine.world, [body]);
-  }, i * 500)
-}
+// run the engine
+Runner.run(runner, engine);
